@@ -10,4 +10,16 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef VECTOR_HPP
+# define VECTOR_HPP
+# include "Node.hpp"
 
+namespace ft
+{
+    template<typename T>
+    class Vector
+    {
+
+    };   
+}
+# endif
