@@ -150,7 +150,7 @@ namespace ft
 	template <class Iterator> class reverse_iterator
 	{
 		private:
-				// Parameter
+				// iterator variable
 				Iterator ite;
 				//default Constructs
 				reverse_iterator();
@@ -177,7 +177,65 @@ namespace ft
 				}
 
 				// Operator
-				
+				reference operator*() const
+				{
+					Iterator it(this->ite);
+					return (*(--it));
+				}
+				reverse_iterator operator+ (difference_type n) const
+				{
+					--this->ite;
+					this->ite -= n;
+					return (*this);
+				}
+				reverse_iterator& operator++()
+				{
+					--this->ite;
+					return (*this);
+				}
+				reverse_iterator  operator++(int)
+				{
+					reverse_iterator it(this->ite--);
+					return (it);
+				}
+				reverse_iterator operator- (difference_type n) const
+				{
+					++this->ite;
+					this->ite += n;
+					return (*this);
+				}
+				reverse_iterator& operator--()
+				{
+					++this->ite;
+					return (*this);
+				}
+				reverse_iterator  operator--(int)
+				{
+					reverse_iterator it(this->ite++);
+					return (it);
+				}
+				reverse_iterator& operator+= (difference_type n)
+				{
+					this->ite -= n;
+					return (*this);
+				}
+				reverse_iterator& operator-= (difference_type n)
+				{
+					this->ite += n;
+					return (*this);
+				}
+				pointer operator->() const
+				{
+					Iterator it(this->ite);
+					--it;
+					return (it.operator->());
+				}
+				reference operator[] (difference_type n) const
+				{
+					Iterator it(this->ite);
+					--it;
+					return (*it);
+				}
 	};
 }//end namespace
 #endif
