@@ -6,18 +6,99 @@
 /*   By: youlee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/31 17:49:11 by youlee            #+#    #+#             */
-/*   Updated: 2021/03/31 17:49:12 by youlee           ###   ########.fr       */
+/*   Updated: 2021/07/25 20:38:24 by youlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 # include <memory>
-# include "iterator/iterator.hpp"
+# include "Iterator/iterator.hpp"
 # include "utils/utils.hpp"
 
 namespace ft
 {
+	template <typename T>
+	class vector_iterator
+	{
+		public:
+				//Member type
+				typedef size_t size_type;
+				typedef ptrdiff_t difference_type;
+				typedef ft::random_access_iterator_tag iterator_category;
+				typedef T value_type;
+				typedef T* pointer;
+				typedef T& reference;
+		private:
+				typedef vector_iterator<T> it;
+				pointer po;
+		public:
+				//canonical form
+				vector_iterator() : po(NULL) {}
+				vector_iterator(const &it) : po(it.po) {}
+				~vector_iterator() {}
+				vector_iterator(pointer p) : po(p) {}
+				it &operator=(const it &in_it)
+				{
+					po = in_it.po;
+					return (*this);
+				}
+				bool operator==(const it &rhs)
+				{
+					return (po == rhs.po);
+				}
+				bool operator!=(const it &rhs)
+				{
+					return (po != rhs.po);
+				}
+				reference operator*() const
+				{
+					return (*po);
+				}
+				pointer operator->() const
+				{
+					return (po);
+				}
+				// incremented
+				it &operator++()
+				{
+					++po;
+					return (*this);
+				}
+				it operator++(int)
+				{
+					it iter = *this;
+					++iter;
+					return (iter);
+				}
+				// decrement
+				it &operator--()
+				{
+					--po;
+					return (*this);
+				}
+				it operator--(int)
+				{
+					it iter = *this;
+					--iter;
+					return (iter);
+				}
+				it &operator+=(size_type off)
+				{
+					po += off;
+					return (*this);
+				}
+				it &operator-=(size_type off)
+				{
+					po -= off;
+					return (*this);
+				}
+				reference operator[](difference_type ite) const
+				{
+					return (*(*this + ite));
+				}
+	};
+
     template < class T, class Alloc = std::allocator < T > > class vector
     {
 		public:
