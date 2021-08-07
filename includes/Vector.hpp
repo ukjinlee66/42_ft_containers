@@ -199,7 +199,53 @@ namespace ft
 					this -> allocator_type = x.get_allocator();
 					insert(begin(), x.begin(), x.end());
 				}
-
+				vector_iterator begin()
+				{
+					return (array);
+				}
+				const_iterator begin() const
+				{
+					return (array);
+				}
+				iterator end()
+				{
+					return (array + _len);
+				}
+				const_iterator end() const
+				{
+					return (array + _len);
+				}
+				reverse_iterator rbegin()
+				{
+					return (reverse_iterator<vector_iterator<T> >(end()));
+				}
+				const_reverse_iterator rbegin() const
+				{
+					return (reverse_iterator<vector_iterator<T> >(end()));
+				}
+				reverse_iterator rend()
+				{
+					return (reverse_iterator<vector_iterator<T> >(begin()));
+				}
+				const_reverse_iterator rend() const
+				{
+					return (reverse_iterator<vector_iterator<T> >(begin()));
+				}
+				size_type size() const
+				{
+					return (_size);
+				}
+				size_type max_size() const
+				{
+					return (std::numeric_limits<difference_type>::max() / sizeof(T));
+				}
+				void resize (size_type n, value_type val = value_type())
+				{
+					if (n >= _len)
+						insert()
+					else
+						
+				}
 				//public member function
 				//Capacity
 				size_type size() const {return (_len);}
