@@ -231,6 +231,9 @@ namespace ft
 				{
 					return (reverse_iterator<vector_iterator<T> >(begin()));
 				}
+
+				//public member function
+				//Capacity
 				size_type size() const
 				{
 					return (_size);
@@ -242,60 +245,184 @@ namespace ft
 				void resize (size_type n, value_type val = value_type())
 				{
 					if (n >= _len)
-						insert()
+						insert(end(), n - _len, val);
 					else
-						
+						erase(begin() + n, end());
 				}
-				//public member function
-				//Capacity
-				size_type size() const {return (_len);}
-				size_type max_size() const {}
-				void resize(size_type n, value_type val = value_type());
-				size_type capacity() const;
-				bool empty() const;
-				void reserve (size_type n);
-				
+				size_type capacity() const
+				{
+					return (this->_size);
+				}
+				bool empty() const
+				{
+					return (this->_len == 0);
+				}
+				//Requests that the vector capacity be at least enough to contain n elements.
+				void reserve (size_type n)
+				{
+					//If n is greater than the current vector capacity, the function causes the container to reallocate
+					//its storage increasing its capacity to n (or greater).
+					if (n > this->_size)
+					{
+						std::allocate<T> alloc;
+						T* val = alloc.allocate(n);
+						for (size_type i = 0;i<_len;i++)
+						{
+							alloc.construct((&val[i], array[i])); // copy current array.
+							alloc.destroy(&array[i]); // delete current array.
+						}
+						alloc.deallocate(array, _size);
+						array = val; // copy new array.
+						_size = n; // copy new array capacity.
+					}
+					else if(!n || n <= this->_size)
+					{
+						//In all other cases, 
+						//the function call does not cause a reallocation and the vector
+						//capacity is not affected.
+						return ;
+					}
+				}
 				//Element Access
-				reference operator[](size_type n);
-				const_reference operator[](size_type n) const;
-				reference at(size_type n);
-				const_reference at(size_type n) const;
-				reference front();
-				const_reference front() const;
-				reference back();
-				const_reference back() const;
-
+				reference operator[](size_type n)
+				{
+					return (array[n]);
+				}
+				const_reference operator[](size_type n) const
+				{
+					return (array[n]);
+				}
+				reference at(size_type n)
+				{
+					if (n >= size())
+					{
+						std::stringstream ss;
+						ss << "index " << n << "out of bound (size() is " << size() <<")";
+						throw std::out_of_range(ss.str()); 
+					}
+					return (array[pos]);
+				}
+				const_reference at(size_type n) const
+				{
+					if (n >= size())
+					{
+						std::stringstream ss;
+						ss << "index " << n << "out of bound (size() is " << size() <<")";
+						throw std::out_of_range(ss.str()); 
+					}
+					return (array[pos]);
+				}
+				reference front()
+				{
+					return (array[0]);
+				}
+				const_reference front() const
+				{
+					return (array[0]);
+				}
+				reference back()
+				{
+					return (array[_len - 1]);	
+				}
+				const_reference back() const
+				{
+					return (array[_len - 1]);
+				}
 				//Modifiers
 				template <class InputIterator>
-				void assign(InputIterator first, InputIterator last);
-				void assign(size_type n, const value_type& val);
-				void push_back(const value_type& val);
-				void pop_back();
-				iterator insert(iterator position, const value_type& val);
-				void insert(iterator position, size_type n, const value_type& val);
+				void assign(InputIterator first, InputIterator last)
+				{
+					clear();
+					insert(begin(), first, last);
+				}
+				void assign(size_type n, const value_type& val)
+				{
+					clear();
+					insert(begin(), n, val);
+				}
+				void push_back(const value_type& val)
+				{
+					insert(end(), val);
+				}
+				void pop_back()
+				{
+					erase(end() - 1);
+				}
+				iterator insert(iterator position, const value_type& val)
+				{
+					insert(position, 1, val);
+					return (position);
+				}
+				void insert(iterator position, size_type n, const value_type& val)
+				{
+					std::allocator<T> alloc;
+					size_type siz;
+					if (!n) return;
+					siz = 
+				}
 				template <class InputIterator>
-				void insert(iterator position, InputIterator first, InputIterator last);
-				iterator erase(iterator postion);
-				iterator erase(iterator first, iterator last);
-				void swap(vector& x);
-				void clear();
-				allocator_type get_allocator() const;
+				void insert(iterator position, InputIterator first, InputIterator last)
+				{
 
-				//Non-member function overloads
-				template <class T, class Alloc>
-				bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-				template <class T, class Alloc>
-				bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-				template <class T, class Alloc>
-				bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-				template <class T, class Alloc>
-				bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-				template <class T, class Alloc>
-				bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-				template <class T, class Alloc>
-				bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-				template <class T, class Alloc>
-				void swap (vector<T,Alloc>& x, vector<T,Alloc>& y);
-    };   
+				}
+				iterator erase(iterator postion)
+				{
+					return erase(position, position + 1);
+				}
+				iterator erase(iterator first, iterator last)
+				{
+
+				}
+				void swap(vector& x)
+				{
+					std::swap(array, x.array);
+					std::swap(_len, x._len);
+					std::swap(_size, x._size);
+				}
+				void clear()
+				{
+					erase(begin(), end());
+				}
+				allocator_type get_allocator() const
+				{
+
+				}
+    };
+	//Non-member function overloads
+	template <class T, class Alloc>
+	bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+
+	}
+	template <class T, class Alloc>
+	bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+
+	}
+	template <class T, class Alloc>
+	bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+
+	}
+	template <class T, class Alloc>
+	bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+
+	}
+	template <class T, class Alloc>
+	bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+
+	}
+	template <class T, class Alloc>
+	bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+	{
+
+	}
+	template <class T, class Alloc>
+	void swap (vector<T,Alloc>& x, vector<T,Alloc>& y)
+	{
+
+	}
 } // namespace end.
 # endif
