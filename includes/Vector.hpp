@@ -356,14 +356,34 @@ namespace ft
 				void insert(iterator position, size_type n, const value_type& val)
 				{
 					std::allocator<T> alloc;
-					size_type siz;
+					size_type siz = position.po - array;
 					if (!n) return;
-					siz = 
+					reserve(_len + n);
+					for (ptrdiff_t i = _len -1;i>=(ptrdiff_t)siz;i--)
+					{
+						alloc.construct(&array[i + n], array[i]);
+						alloc.destroy(&array[i]);
+					}
+					for (size_type i = siz;i < siz + n; i++)
+						alloc.construct(&array[i], val);
+					_len += n;
 				}
 				template <class InputIterator>
 				void insert(iterator position, InputIterator first, InputIterator last)
 				{
-
+					std::allocator<T> alloc;
+					size_type siz = position.po - array;
+					size_type dist = distance(first, last);
+					if (!dist) return;
+					reserve(_len + dist);
+					for (ptrdiff_t i = _len -1;i>=(ptrdiff_t)siz;i--)
+					{
+						alloc.construct(&array[i + dist], array[i]);
+						alloc.destroy(&array[i]);
+					}
+					for (size_type i = siz;i < siz + dist; i++)
+						alloc.construct(&array[i], val);
+					_len += dist;
 				}
 				iterator erase(iterator postion)
 				{
@@ -371,7 +391,18 @@ namespace ft
 				}
 				iterator erase(iterator first, iterator last)
 				{
-
+					std::allocator<T> alloc;
+					size_type dist = last - first;
+					size_type idx = first.po - array;
+					for (size_type i = idx;i<idx + dist;i++)
+						alloc.destroy(&array[i]);
+					for (size_type i = idx + dist;i < _len; i++)
+					{
+						alloc.construct(&array[i - dist], array[i]);
+						alloc.destroy(&array[i]);
+					}
+					_len -= dist;
+					return (first);
 				}
 				void swap(vector& x)
 				{
@@ -392,37 +423,38 @@ namespace ft
 	template <class T, class Alloc>
 	bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 	{
-
+		if (lhs.size() != rhs.size()) return false;
+		return equal(lhs.begin(),lhs.end(),rhs.begin());
 	}
 	template <class T, class Alloc>
 	bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 	{
-
+		return (lhs != rhs);
 	}
 	template <class T, class Alloc>
 	bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 	{
-
+		return (lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
 	}
 	template <class T, class Alloc>
 	bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 	{
-
+		return (lhs <= rhs);
 	}
 	template <class T, class Alloc>
 	bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 	{
-
+		return (lhs > rhs);
 	}
 	template <class T, class Alloc>
 	bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 	{
-
+		return (lhs >= rhs);
 	}
 	template <class T, class Alloc>
 	void swap (vector<T,Alloc>& x, vector<T,Alloc>& y)
 	{
-
+		y.swap(x);
 	}
 } // namespace end.
 # endif
