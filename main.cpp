@@ -1,10 +1,10 @@
-#include <iostream>
-#include <string>
-#include <deque>
+# include <iostream>
+# include <string>
+# include <deque>
 #if 1 //CREATE A REAL STL EXAMPLE
-	#include <map>
-	#include <stack>
-	#include <vector>
+	# include <map>
+	# include <stack>
+	# include <vector>
 	namespace ft = std;
 #else
 	#include <map.hpp>
@@ -14,6 +14,8 @@
 
 #include <stdlib.h>
 #include "includes/Vector.hpp"
+#include "includes/Iterator/iterator.hpp"
+#include "includes/utils/utils.hpp"
 
 #define MAX_RAM 4294967296
 #define BUFFER_SIZE 4096
@@ -45,7 +47,8 @@ struct Buffer
 // 	iterator end() { return this->c.end(); }
 // };
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv) 
+{
 	if (argc != 2)
 	{
 		std::cerr << "Usage: ./test seed" << std::endl;

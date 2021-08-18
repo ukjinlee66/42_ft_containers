@@ -12,9 +12,9 @@
 
 #ifndef ITERATOR_HPP
 # define ITERATOR_HPP
-typedef int ptrdiff_t;
 namespace ft
 {
+	typedef int ptrdiff_t;
 	// template<class Category, class T, class Distance = ptrdiff_t, class Pointer = T*, class Reference = T& >
 	// class iterator
 	// {
@@ -25,6 +25,33 @@ namespace ft
 	// 			typedef T&								reference;
 	// 			typedef Category						iterator_category;
 	// };
+	struct input_iterator_tag
+	{      
+	// identifying tag for input iterators
+	};
+	
+	struct output_iterator_tag
+	{      
+	// identifying tag for output iterators
+	};
+	
+	struct forward_iterator_tag
+		: public input_iterator_tag, output_iterator_tag
+	{      
+	// identifying tag for forward iterators
+	};
+	
+	struct bidirectional_iterator_tag
+		: public forward_iterator_tag
+	{      
+	// identifying tag for bidirectional iterators
+	};
+	
+	struct random_access_iterator_tag
+		: public bidirectional_iterator_tag
+	{      
+	// identifying tag for random-access iterators
+	};
 	//iterator_traits
 	template <class iterator> 
 	class iterator_traits
@@ -55,33 +82,7 @@ namespace ft
 				typedef const T&						reference;
 				typedef random_access_iterator_tag		iterator_category;
 	};
-	struct input_iterator_tag
-	{      
-	// identifying tag for input iterators
-	};
 	
-	struct output_iterator_tag
-	{      
-	// identifying tag for output iterators
-	};
-	
-	struct forward_iterator_tag
-		: public input_iterator_tag, output_iterator_tag
-	{      
-	// identifying tag for forward iterators
-	};
-	
-	struct bidirectional_iterator_tag
-		: public forward_iterator_tag
-	{      
-	// identifying tag for bidirectional iterators
-	};
-	
-	struct random_access_iterator_tag
-		: public bidirectional_iterator_tag
-	{      
-	// identifying tag for random-access iterators
-	};
 
 	// iterator distance base function overloading
 
@@ -102,7 +103,7 @@ namespace ft
 	template<class NonRandomaccessIterator> typename iterator_traits<NonRandomaccessIterator>::difference_type
 	distance (NonRandomaccessIterator first, NonRandomaccessIterator last, input_iterator_tag)
 	{
-		iterator_traits<NonRandomaccessIterator>::difference_type dist = 0;
+		typename iterator_traits<NonRandomaccessIterator>::difference_type dist = 0;
 		for(;first!=last;first++)
 			dist++;
 		return (dist);
@@ -147,7 +148,8 @@ namespace ft
 	}
 
 	// reverse iterator
-	template <class Iterator> class reverse_iterator
+	template <class Iterator> 
+	class reverse_iterator
 	{
 		private:
 				// iterator variable
@@ -157,11 +159,11 @@ namespace ft
 		public:
 				// Member type
 				typedef Iterator iterator_type;
-				typedef iterator_traits<Iterator>::iterator_category iterator_category;
-				typedef iterator_traits<Iterator>::value_type value_type;
-				typedef iterator_traits<Iterator>::difference_type difference_type;
-				typedef iterator_traits<Iterator>::pointer pointer;
-				typedef iterator_traits<Iterator>::reference reference;
+				typedef typename iterator_traits<Iterator>::iterator_category iterator_category;
+				typedef typename iterator_traits<Iterator>::value_type value_type;
+				typedef typename iterator_traits<Iterator>::difference_type difference_type;
+				typedef typename iterator_traits<Iterator>::pointer pointer;
+				typedef typename iterator_traits<Iterator>::reference reference;
 
 				// Member functions
 				//initialization

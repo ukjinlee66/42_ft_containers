@@ -24,10 +24,10 @@ namespace ft
 		first_type first;
 		second_type second;
 		//default constructor
-		pair() : first(), second()
+		pair() : first(), second() {}
 		//copy
-		template<class U, class V> 
-		pair (const pair<U,V>& pr) : first(pr.first) , second(pr.second){}
+		template < class U, class V >
+		pair (const pair<U,V>& pr) : first(pr.first) , second(pr.second) {}
 		//init
 		pair (const first_type& a, const second_type& b) : first(a), second(b){}
 
@@ -134,5 +134,5 @@ bool equal (InputIterator1 first1, InputIterator1 last1, InputIterator2 first2, 
 	}
 	return (true);
 }
-}; // end namespace
+} // end namespace
 #endif

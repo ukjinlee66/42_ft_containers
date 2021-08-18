@@ -13,6 +13,7 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 # include <memory>
+# include <sstream>
 # include "Iterator/iterator.hpp"
 # include "utils/utils.hpp"
 
@@ -36,7 +37,7 @@ namespace ft
 		public:
 				//canonical form
 				vector_iterator() : po(NULL) {}
-				vector_iterator(const &it) : po(it.po) {}
+				vector_iterator(const it &it2) : po(it2.po) {}
 				~vector_iterator() {}
 				vector_iterator(pointer p) : po(p) {}
 				it &operator=(const it &in_it)
@@ -134,7 +135,8 @@ namespace ft
 				}
 	};
 
-    template < class T, class Alloc = std::allocator < T > > class vector
+    template < class T, class Alloc = std::allocator < T > > 
+	class vector
     {
 		public:
 				typedef T value_type;
@@ -157,11 +159,8 @@ namespace ft
 				typedef vector_iterator<const T> const_iterator;
 
 				//reverse iterator
-				typedef ft::reverse_iterator<T> reverse_iterator;
-				typedef ft::reverse_iterator<const T> const_reverse_iterator;
-
-				// typedef typename ft::iterator_traits<iterator>::difference_type difference_type;
-				typedef typename allocator_type::size_type			size_type;
+				typedef ft::reverse_iterator<iterator> reverse_iterator;
+				typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 				//(constructor)
 				explicit vector (const allocator_type& alloc = allocator_type()) : array(NULL), _size(0), _len(0)
 				{
@@ -193,13 +192,14 @@ namespace ft
 						all.destroy(&array[i]);
 					all.deallocate(array, _len);
 				}
-				container& operator= (const vector& x) : array(NULL), _size(0), _len(0)
+				container& operator=(const vector& x)
 				{
 					clear();
 					this -> allocator_type = x.get_allocator();
 					insert(begin(), x.begin(), x.end());
+					return (*this);
 				}
-				vector_iterator begin()
+				iterator begin()
 				{
 					return (array);
 				}
@@ -217,19 +217,19 @@ namespace ft
 				}
 				reverse_iterator rbegin()
 				{
-					return (reverse_iterator<vector_iterator<T> >(end()));
+					return (ft::reverse_iterator<vector_iterator<T> >(end()));
 				}
 				const_reverse_iterator rbegin() const
 				{
-					return (reverse_iterator<vector_iterator<T> >(end()));
+					return (ft::reverse_iterator<vector_iterator<T> >(end()));
 				}
 				reverse_iterator rend()
 				{
-					return (reverse_iterator<vector_iterator<T> >(begin()));
+					return (ft::reverse_iterator<vector_iterator<T> >(begin()));
 				}
 				const_reverse_iterator rend() const
 				{
-					return (reverse_iterator<vector_iterator<T> >(begin()));
+					return (ft::reverse_iterator<vector_iterator<T> >(begin()));
 				}
 
 				//public member function
@@ -264,7 +264,7 @@ namespace ft
 					//its storage increasing its capacity to n (or greater).
 					if (n > this->_size)
 					{
-						std::allocate<T> alloc;
+						std::allocator<T> alloc;
 						T* val = alloc.allocate(n);
 						for (size_type i = 0;i<_len;i++)
 						{
@@ -300,7 +300,7 @@ namespace ft
 						ss << "index " << n << "out of bound (size() is " << size() <<")";
 						throw std::out_of_range(ss.str()); 
 					}
-					return (array[pos]);
+					return (array[n]);
 				}
 				const_reference at(size_type n) const
 				{
@@ -310,7 +310,7 @@ namespace ft
 						ss << "index " << n << "out of bound (size() is " << size() <<")";
 						throw std::out_of_range(ss.str()); 
 					}
-					return (array[pos]);
+					return (array[n]);
 				}
 				reference front()
 				{
@@ -381,11 +381,11 @@ namespace ft
 						alloc.construct(&array[i + dist], array[i]);
 						alloc.destroy(&array[i]);
 					}
-					for (size_type i = siz;i < siz + dist; i++)
-						alloc.construct(&array[i], val);
+					for (InputIterator i = siz;i < siz + dist; i++)
+						alloc.construct(&array[siz++], *i);
 					_len += dist;
 				}
-				iterator erase(iterator postion)
+				iterator erase(iterator position)
 				{
 					return erase(position, position + 1);
 				}
