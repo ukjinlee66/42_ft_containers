@@ -27,7 +27,7 @@ struct Buffer
 
 
 #define COUNT (MAX_RAM / (int)sizeof(Buffer))
-
+// test
 // template<typename T>
 // class MutantStack : public ft::stack<T>
 // {
